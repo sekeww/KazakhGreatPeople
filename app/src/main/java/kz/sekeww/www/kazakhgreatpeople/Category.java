@@ -1,19 +1,21 @@
 package kz.sekeww.www.kazakhgreatpeople;
 
 /**
- * Created by Askhat on 10/10/2016.
+ * Created by Askhat on 6/15/2016.
  */
-public class Akyn {
-    private String ojectId;
+
+public class Category {
+
+    private String objectId;
     private String title;
     private String image;
 
-    public String getOjectId() {
-        return ojectId;
+    public String getObjectId() {
+        return objectId;
     }
 
-    public void setOjectId(String ojectId) {
-        this.ojectId = ojectId;
+    public void setObjectId(String ojectId) {
+        this.objectId = ojectId;
     }
 
     public String getTitle() {
@@ -32,5 +34,3 @@ public class Akyn {
         this.image = image;
     }
 }
-
-

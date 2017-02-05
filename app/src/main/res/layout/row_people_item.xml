@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/peopleImageView"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/peopleTitleTextView"
+        android:text="Karasay Batyr"
+        android:layout_alignLeft="@id/peopleImageView"
+        android:layout_alignBottom="@id/peopleImageView"
+        android:background="#80000000"
+        android:padding="10dp"
+        android:textSize="24dp"
+        android:layout_marginBottom="30dp"
+        android:textColor="#fff"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/peopleAgeTextView"
+        android:text="1965-1995"
+        android:layout_marginTop="20dp"
+        android:layout_alignBottom="@id/peopleImageView"
+        android:layout_marginLeft="20dp"
+        android:textStyle="italic"
+        android:textColor="#80000000"/>
+    
+</RelativeLayout>

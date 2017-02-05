@@ -16,15 +16,15 @@ import java.util.List;
  * Created by Askhat on 6/15/2016.
  */
 
-public class BatyrAdapter extends BaseAdapter {
+public class CategoryAdapter extends BaseAdapter {
 
-    private List<Batyr>  cities;
+    private List<Category> categories;
     private Context context;
     private LayoutInflater inflater;
 
-    public BatyrAdapter(Context context, List<Batyr> cities) {
+    public CategoryAdapter(Context context, List<Category> categories) {
         this.context = context;
-        this.cities = cities;
+        this.categories = categories;
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -32,7 +32,7 @@ public class BatyrAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return cities.size();
+        return categories.size();
     }
 
     @Override
@@ -51,15 +51,15 @@ public class BatyrAdapter extends BaseAdapter {
         ViewHolder viewHolder = null;
 
         if(convertView == null){
-            convertView = inflater.inflate(R.layout.row_batyr_item,null);
+            convertView = inflater.inflate(R.layout.row_category_item,null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.cityTitleListView.setText(cities.get(position).getTitle());
+        viewHolder.cityTitleListView.setText(categories.get(position).getTitle());
 
-        Glide.with(context).load(cities.get(position).getImage()).centerCrop().into(viewHolder.cityImageView);
+        Glide.with(context).load(categories.get(position).getImage()).centerCrop().into(viewHolder.cityImageView);
 
         return convertView;
     }

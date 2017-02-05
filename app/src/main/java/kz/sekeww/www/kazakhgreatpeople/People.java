@@ -1,21 +1,20 @@
 package kz.sekeww.www.kazakhgreatpeople;
 
 /**
- * Created by Askhat on 6/15/2016.
+ * Created by BEK on 05.02.2017.
  */
-
-public class Batyr {
-
-    private String ojectId;
+public class People {
+    private String objectId;
     private String title;
+    private String age;
     private String image;
 
-    public String getOjectId() {
-        return ojectId;
+    public String getObjectId() {
+        return objectId;
     }
 
-    public void setOjectId(String ojectId) {
-        this.ojectId = ojectId;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     public String getTitle() {
@@ -24,6 +23,14 @@ public class Batyr {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public String getImage() {
