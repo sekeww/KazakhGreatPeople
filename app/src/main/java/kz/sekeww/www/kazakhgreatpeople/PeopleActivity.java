@@ -45,6 +45,7 @@ public class PeopleActivity extends AppCompatActivity {
         //Log.d("myLog1",peoples.get(position).getAbout()+"");
         intent.putExtra("people_txt_url",peoples.get(position).getAbout());
         intent.putExtra("image_url",peoples.get(position).getImage());
+        intent.putExtra("people_title",peoples.get(position).getTitle());
         startActivity(intent);
     }
 

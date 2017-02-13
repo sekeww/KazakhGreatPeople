@@ -7,12 +7,10 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
-import android.webkit.WebView;
+
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.bumptech.glide.Glide;
 
@@ -22,17 +20,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import me.biubiubiu.justifytext.library.JustifyTextView;
 
-import static kz.sekeww.www.kazakhgreatpeople.R.id.imageView;
 
 public class AboutActivity extends AppCompatActivity {
-
 
     private String targetURL;
     private TextView textView;
     private ImageView imageView;
     private String image_url;
+    private String people_title;
     private String text="";
     ProgressDialog pd;
 
@@ -48,17 +44,31 @@ public class AboutActivity extends AppCompatActivity {
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
-        collapsingToolbar.setTitle("ABcDeFg");
+
         textView = (TextView) findViewById(R.id.textView);
         imageView  = (ImageView) findViewById(R.id.imageView);
 
         targetURL = getIntent().getExtras().getString("people_txt_url");
         image_url = getIntent().getExtras().getString("image_url");
+        people_title = getIntent().getExtras().getString("people_title");
 
+        collapsingToolbar.setTitle(people_title);
         Glide.with(this).load(image_url).into(imageView);
 
         BackTask bt=new BackTask();
         bt.execute(targetURL);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private class BackTask extends AsyncTask<String,Integer,Void> {
@@ -115,4 +125,6 @@ public class AboutActivity extends AppCompatActivity {
             textView.setText(text);
         }
     }
+
+
 }
