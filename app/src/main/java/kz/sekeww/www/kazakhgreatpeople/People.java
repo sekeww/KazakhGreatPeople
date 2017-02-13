@@ -8,6 +8,7 @@ public class People {
     private String title;
     private String age;
     private String image;
+    private String about;
 
     public String getObjectId() {
         return objectId;
@@ -39,5 +40,13 @@ public class People {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 }

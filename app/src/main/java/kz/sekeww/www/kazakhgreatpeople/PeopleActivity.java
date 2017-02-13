@@ -3,7 +3,6 @@ package kz.sekeww.www.kazakhgreatpeople;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -14,13 +13,12 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PeopleActivity extends AppCompatActivity {
 
     private String categoryId;
+    private List<People> peoples;
     private ListView listView;
 
     @Override
@@ -29,15 +27,29 @@ public class PeopleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_people);
 
         listView = (ListView) findViewById(R.id.listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onPeopleClick(position);
+            }
+        });
 
         categoryId = getIntent().getExtras().getString("category_id");
 
-        Log.d("myLog",categoryId+"");
+        //Log.d("myLog",categoryId+"");
         downloadPeople(categoryId);
     }
 
+    private void onPeopleClick(int position) {
+        Intent intent = new Intent(this, AboutActivity.class);
+        //Log.d("myLog1",peoples.get(position).getAbout()+"");
+        intent.putExtra("people_txt_url",peoples.get(position).getAbout());
+        intent.putExtra("image_url",peoples.get(position).getImage());
+        startActivity(intent);
+    }
+
     private void downloadPeople(String categoryId) {
-        Log.d("myLog","going To Download People");
+       // Log.d("myLog","going To Download People");
 
         String whereClause = "category.objectId = " + "'" + categoryId + "'";
 
@@ -47,7 +59,7 @@ public class PeopleActivity extends AppCompatActivity {
         Backendless.Persistence.of(People.class).find(query, new AsyncCallback<BackendlessCollection<People>>() {
             @Override
             public void handleResponse(BackendlessCollection<People> response) {
-                Log.d("myLog",response.getData()+"");
+               // Log.d("myLog",response.getData()+"");
                 displayPeople(response.getData());
             }
 
@@ -61,6 +73,7 @@ public class PeopleActivity extends AppCompatActivity {
     }
 
     private void displayPeople(List<People> peoples) {
+        this.peoples=peoples;
         PeopleAdapter adapter = new PeopleAdapter(this, peoples);
         listView.setAdapter(adapter);
     }

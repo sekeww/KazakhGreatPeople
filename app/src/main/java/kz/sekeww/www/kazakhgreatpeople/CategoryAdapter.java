@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+
 /**
  * Created by Askhat on 6/15/2016.
  */
@@ -21,6 +22,7 @@ public class CategoryAdapter extends BaseAdapter {
     private List<Category> categories;
     private Context context;
     private LayoutInflater inflater;
+
 
     public CategoryAdapter(Context context, List<Category> categories) {
         this.context = context;
@@ -57,8 +59,10 @@ public class CategoryAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
         viewHolder.cityTitleListView.setText(categories.get(position).getTitle());
 
+        //imageLoader.DisplayImage(categories.get(position).getImage(), viewHolder.cityImageView, context);
         Glide.with(context).load(categories.get(position).getImage()).centerCrop().into(viewHolder.cityImageView);
 
         return convertView;

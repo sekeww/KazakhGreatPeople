@@ -26,11 +26,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/peopleAgeTextView"
-        android:text="1965-1995"
-        android:layout_marginTop="20dp"
         android:layout_alignBottom="@id/peopleImageView"
+        android:textSize="20sp"
         android:layout_marginLeft="20dp"
+        android:shadowColor="#7F000000"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
         android:textStyle="italic"
-        android:textColor="#80000000"/>
+        android:textColor="#fff"/>
     
 </RelativeLayout>
