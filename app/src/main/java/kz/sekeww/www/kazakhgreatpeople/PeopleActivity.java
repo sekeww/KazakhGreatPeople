@@ -1,17 +1,28 @@
 package kz.sekeww.www.kazakhgreatpeople;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.List;
 
@@ -20,37 +31,81 @@ public class PeopleActivity extends AppCompatActivity {
     private String categoryId;
     private List<People> peoples;
     private ListView listView;
+    private ProgressDialog pd;
+    private RelativeLayout relativeLayoutPeeopleAct;
+    private int thePosition;
+
+    private InterstitialAd interstitial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_people);
 
+        relativeLayoutPeeopleAct = (RelativeLayout) findViewById(R.id.relativeLayoutPeeopleAct);
         listView = (ListView) findViewById(R.id.listView);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        categoryId = getIntent().getExtras().getString("category_id");
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        final AdRequest adRequest = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").build();
+        mAdView.loadAd(adRequest);
+
+        interstitial = new InterstitialAd(getApplicationContext());
+        interstitial.setAdUnitId(getResources().getString(R.string.ads_interstitialBanner_id));
+
+        interstitial.setAdListener(new AdListener() {
+
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                onPeopleClick(position);
+            public void onAdClosed() {
+                requestNewInterstitial();
+                onPeopleClick(thePosition);
             }
         });
 
-        categoryId = getIntent().getExtras().getString("category_id");
+        // Begin loading your interstitial.
+        requestNewInterstitial();   // если закоментировать, то утечки не будет
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                thePosition = position;
+                if (interstitial.isLoaded()) {
+                    interstitial.show();
+                } else {
+                    onPeopleClick(position);
+                }
+            }
+        });
 
         //Log.d("myLog",categoryId+"");
         downloadPeople(categoryId);
     }
 
-    private void onPeopleClick(int position) {
-        Intent intent = new Intent(this, AboutActivity.class);
-        //Log.d("myLog1",peoples.get(position).getAbout()+"");
-        intent.putExtra("people_txt_url",peoples.get(position).getAbout());
-        intent.putExtra("image_url",peoples.get(position).getImage());
-        intent.putExtra("people_title",peoples.get(position).getTitle());
-        startActivity(intent);
+    private void requestNewInterstitial() {
+        AdRequest adRequest1 = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").build();
+        interstitial.loadAd(adRequest1);
     }
 
-    private void downloadPeople(String categoryId) {
+    private void onPeopleClick(int position) {
+
+            Intent intent = new Intent(this, AboutActivity.class);
+            //Log.d("myLog1",peoples.get(position).getAbout()+"");
+            intent.putExtra("people_txt_url", peoples.get(position).getAbout());
+            intent.putExtra("image_url", peoples.get(position).getImage());
+            intent.putExtra("people_title", peoples.get(position).getTitle());
+            startActivity(intent);
+    }
+
+    private void downloadPeople(final String categoryId) {
        // Log.d("myLog","going To Download People");
+
+        pd = new ProgressDialog(PeopleActivity.this);
+        pd.setTitle("Establishing the server connection");
+        pd.setMessage("Check your Internet connection!\nIt may take 2 min...");
+        pd.setCancelable(true);
+        pd.setIndeterminate(false);
+        pd.show();
 
         String whereClause = "category.objectId = " + "'" + categoryId + "'";
 
@@ -61,6 +116,8 @@ public class PeopleActivity extends AppCompatActivity {
             @Override
             public void handleResponse(BackendlessCollection<People> response) {
                // Log.d("myLog",response.getData()+"");
+                if(pd!=null)
+                    pd.dismiss();
                 displayPeople(response.getData());
             }
 
@@ -68,7 +125,27 @@ public class PeopleActivity extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault fault) {
+                if(pd!=null)
+                    pd.dismiss();
+                Snackbar snackbar = Snackbar
+                        .make(relativeLayoutPeeopleAct, "No internet connection!", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("RETRY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                downloadPeople(categoryId);
+                            }
+                        });
 
+                // Changing message text color
+                snackbar.setActionTextColor(Color.RED);
+
+// Changing action button text color
+                View sbView = snackbar.getView();
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setTextColor(Color.YELLOW);
+                snackbar.show();
+
+                Log.e("my_log","some error "+ fault.getMessage());
             }
         });
     }

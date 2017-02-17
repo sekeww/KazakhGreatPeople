@@ -28,6 +28,7 @@
         android:id="@+id/peopleAgeTextView"
         android:layout_alignBottom="@id/peopleImageView"
         android:textSize="20sp"
+        android:padding="3dp"
         android:layout_marginLeft="20dp"
         android:shadowColor="#7F000000"
         android:shadowDx="1"
