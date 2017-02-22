@@ -37,31 +37,14 @@ public class AboutActivity extends AppCompatActivity {
     private String text="";
     ProgressDialog pd;
 
-    private InterstitialAd interstitial;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
-        final AdRequest adRequest = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").build();
+        final AdRequest adRequest = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").addTestDevice("27B1B3B72C8B485FEA61CFA654562346").build();
         mAdView.loadAd(adRequest);
-
-        interstitial = new InterstitialAd(getApplicationContext());
-        interstitial.setAdUnitId(getResources().getString(R.string.ads_interstitialBanner_id));
-
-        interstitial.setAdListener(new AdListener() {
-
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitial();
-                finish();
-            }
-        });
-
-        // Begin loading your interstitial.
-        requestNewInterstitial();   // если закоментировать, то утечки не будет
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -85,31 +68,18 @@ public class AboutActivity extends AppCompatActivity {
         bt.execute(targetURL);
     }
 
-    private void requestNewInterstitial() {
-        AdRequest adRequest1 = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").build();
-        interstitial.loadAd(adRequest1);
-    }
 
-    @Override
-    public void onBackPressed() {
-        if (interstitial.isLoaded()) {
-            interstitial.show();
-            finish();
-        } else {
-            super.onBackPressed();
-        }
-    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (interstitial.isLoaded()) {
-                    interstitial.show();
-                } else {
+
                     // app icon in action bar clicked; goto parent activity.
                     this.finish();
-                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -78,7 +78,7 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     private void requestNewInterstitial() {
-        AdRequest adRequest1 = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").build();
+        AdRequest adRequest1 = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").addTestDevice("27B1B3B72C8B485FEA61CFA654562346").build();
         interstitial.loadAd(adRequest1);
     }
 
@@ -92,8 +92,8 @@ public class CategoryActivity extends AppCompatActivity {
     private void downloadCategories(){
 
         pd = new ProgressDialog(CategoryActivity.this);
-        pd.setTitle("Establishing the server connection");
-        pd.setMessage("Check your Internet connection!\nIt may take 2 min...");
+        pd.setTitle("Сервермен байланыс орнатылуда...");
+        pd.setMessage("Ғаламтор қосылымын тексеріңіз!\nБұл 2 минут уақыт алуы мүмкін...");
         pd.setCancelable(true);
         pd.setIndeterminate(false);
         pd.show();
@@ -113,8 +113,8 @@ public class CategoryActivity extends AppCompatActivity {
                 if(pd!=null)
                     pd.dismiss();
                 Snackbar snackbar = Snackbar
-                        .make(linearLayout, "No internet connection!", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("RETRY", new View.OnClickListener() {
+                        .make(linearLayout, "Ғаламтор қосылымы жоқ!", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Қайталау", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 downloadCategories();

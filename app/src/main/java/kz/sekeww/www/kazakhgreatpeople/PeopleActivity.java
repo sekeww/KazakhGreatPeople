@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ public class PeopleActivity extends AppCompatActivity {
     private List<People> peoples;
     private ListView listView;
     private ProgressDialog pd;
-    private RelativeLayout relativeLayoutPeeopleAct;
+    private LinearLayout linearLayoutPeeopleAct;
     private int thePosition;
 
     private InterstitialAd interstitial;
@@ -42,13 +43,13 @@ public class PeopleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_people);
 
-        relativeLayoutPeeopleAct = (RelativeLayout) findViewById(R.id.relativeLayoutPeeopleAct);
+        linearLayoutPeeopleAct = (LinearLayout) findViewById(R.id.linearLayoutPeeopleAct);
         listView = (ListView) findViewById(R.id.listView);
 
         categoryId = getIntent().getExtras().getString("category_id");
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
-        final AdRequest adRequest = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").build();
+        final AdRequest adRequest = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").addTestDevice("27B1B3B72C8B485FEA61CFA654562346").build();
         mAdView.loadAd(adRequest);
 
         interstitial = new InterstitialAd(getApplicationContext());
@@ -83,7 +84,7 @@ public class PeopleActivity extends AppCompatActivity {
     }
 
     private void requestNewInterstitial() {
-        AdRequest adRequest1 = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").build();
+        AdRequest adRequest1 = new AdRequest.Builder().addTestDevice("2FC2BC09C96DC70DE1A7EAF9FEFC4941").addTestDevice("27B1B3B72C8B485FEA61CFA654562346").build();
         interstitial.loadAd(adRequest1);
     }
 
@@ -101,8 +102,8 @@ public class PeopleActivity extends AppCompatActivity {
        // Log.d("myLog","going To Download People");
 
         pd = new ProgressDialog(PeopleActivity.this);
-        pd.setTitle("Establishing the server connection");
-        pd.setMessage("Check your Internet connection!\nIt may take 2 min...");
+        pd.setTitle("Сервермен байланыс орнатылуда...");
+        pd.setMessage("Ғаламтор қосылымын тексеріңіз!\nБұл 2 минут уақыт алуы мүмкін...");
         pd.setCancelable(true);
         pd.setIndeterminate(false);
         pd.show();
@@ -110,6 +111,7 @@ public class PeopleActivity extends AppCompatActivity {
         String whereClause = "category.objectId = " + "'" + categoryId + "'";
 
         BackendlessDataQuery query = new BackendlessDataQuery();
+        query.setPageSize(50);
         query.setWhereClause(whereClause);
 
         Backendless.Persistence.of(People.class).find(query, new AsyncCallback<BackendlessCollection<People>>() {
@@ -128,8 +130,8 @@ public class PeopleActivity extends AppCompatActivity {
                 if(pd!=null)
                     pd.dismiss();
                 Snackbar snackbar = Snackbar
-                        .make(relativeLayoutPeeopleAct, "No internet connection!", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("RETRY", new View.OnClickListener() {
+                        .make(linearLayoutPeeopleAct, "Ғаламтор қосылымы жоқ!", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Қайталау", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 downloadPeople(categoryId);
